@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { updateUserDetails } from "../userSlice";
+import { useNavigate } from "react-router-dom";
 
 const UserDetails = () => {
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
   const [phone, setPhone] = useState("");
-
+  const navigate = useNavigate();
   const users = useSelector((state) => state.user.users);
   const dispatch = useDispatch();
   const handleSubmit = (e) => {
@@ -14,6 +15,7 @@ const UserDetails = () => {
     const user = users[users.length - 1];
     console.log(user.email);
     dispatch(updateUserDetails({ email: user.email, name, role, phone }));
+    navigate("/taskboard");
   };
   return (
     <div className="flex justify-center items-center h-screen">

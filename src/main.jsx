@@ -6,6 +6,8 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import UserDetails from "./components/UserDetails.jsx";
 import { store } from "./store.js";
 import { Provider } from "react-redux";
+import TaskBoard from "./components/TaskBoard.jsx";
+import CreateTodo from "./components/createTodo.jsx";
 
 const router = createBrowserRouter([
   {
@@ -15,6 +17,14 @@ const router = createBrowserRouter([
   {
     path: "/details",
     element: <UserDetails />,
+  },
+  {
+    path: "/taskboard",
+    element: <TaskBoard />,
+  },
+  {
+    path: "/createTodo",
+    element: <CreateTodo />,
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(

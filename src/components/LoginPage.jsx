@@ -13,22 +13,26 @@ const LoginPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const existingUser = users.find((user) => user.email === email);
+    if (existingUser) {
+      navigate("/taskboard");
+    } else {
+      const newUser = {
+        email,
+        password,
+        details: {
+          name: "",
+          role: "",
+          phone: "",
+        },
+      };
 
-    const newUser = {
-      email,
-      password,
-      details: {
-        name: "",
-        role: "",
-        phone: "",
-      },
-    };
+      dispatch(addUser(newUser));
 
-    dispatch(addUser(newUser));
-
-    setEmail("");
-    setPassword("");
-    navigate("/details");
+      setEmail("");
+      setPassword("");
+      navigate("/details");
+    }
   };
   return (
     <div className="flex justify-center items-center h-screen">
