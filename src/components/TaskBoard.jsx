@@ -19,14 +19,11 @@ const TaskBoard = () => {
 
   return (
     <div className="flex">
-      {/* Sidebar */}
       <div className="w-1/5 p-4 bg-gray-800 text-white h-screen">
         <Sidebar />
       </div>
 
-      {/* Main Content */}
       <div className="flex-1 flex m-2">
-        {/* Todo Lists */}
         <div className="w-1/3 p-4 bg-red-200 rounded-lg">
           <h2 className="text-xl font-bold mb-4 text-center">Todo</h2>
           {tasks
@@ -54,7 +51,6 @@ const TaskBoard = () => {
             ))}
         </div>
 
-        {/* Add Task Button */}
         <div className="flex-shrink-0 p-4">
           <button
             onClick={handleAddTask}

@@ -5,15 +5,34 @@ export const taskSlice = createSlice({
   initialState: {
     tasks: [
       {
-        id: Date.now(),
+        id: 1,
         title: "Trello clone",
         description: "Trello Clone by Practo",
         status: "Todo",
         priority: "Major",
-        PlannedDate: "24",
+        plannedDate: "2024-01-24",
+        attachments: ["file1.jpg", "file2.jpg"],
+      },
+      {
+        id: 2,
+        title: "Trello clone",
+        description: "Trello Clone by Practo",
+        status: "Completed",
+        priority: "Major",
+        plannedDate: "2024-01-24",
+        attachments: ["file1.jpg", "file2.jpg"],
+      },
+      {
+        id: 3,
+        title: "Trello clone",
+        description: "Trello Clone by Practo",
+        status: "In Progress",
+        priority: "Major",
+        plannedDate: "2024-01-25",
         attachments: ["file1.jpg", "file2.jpg"],
       },
     ],
+    sortBy: null,
   },
   reducers: {
     addTask: (state, action) => {
@@ -27,9 +46,12 @@ export const taskSlice = createSlice({
         state.tasks[taskIndex] = { ...existingTask, ...updatedTask };
       }
     },
+    setSortBy: (state, action) => {
+      state.sortBy = action.payload;
+    },
   },
 });
 
-export const { addTask, editTask } = taskSlice.actions;
+export const { addTask, editTask, setSortBy } = taskSlice.actions;
 
 export default taskSlice.reducer;

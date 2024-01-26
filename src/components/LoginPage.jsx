@@ -1,70 +1,159 @@
-import React, { useEffect, useState } from "react";
+// UserForm.js
+
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addUser, updateUserDetails } from "../userSlice";
+import axios from "axios";
+import { jwtDecode } from "jwt-decode";
+import { setToken } from "../authSlice";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { addUser } from "../userSlice";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const users = useSelector((state) => state.user.users);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const [phone, setPhone] = useState("");
+  const [isRegistered, setIsRegistered] = useState(true);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const existingUser = users.find((user) => user.email === email);
-    if (existingUser) {
-      navigate("/taskboard");
-    } else {
-      const newUser = {
+  const handleLogin = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/login", {
         email,
         password,
-        details: {
-          name: "",
-          role: "",
-          phone: "",
-        },
-      };
+      });
 
-      dispatch(addUser(newUser));
+      const token = response.data.token;
 
-      setEmail("");
-      setPassword("");
-      navigate("/details");
+      dispatch(setToken(token));
+      navigate("/taskboard");
+    } catch (error) {
+      console.error("Login failed", error);
+      setIsRegistered(false);
     }
   };
+
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post("http://localhost:8080/api/register", {
+        email,
+        password,
+        name,
+        role,
+        phone,
+      });
+      setIsRegistered(true);
+    } catch (error) {
+      console.error("Registration failed", error);
+    }
+  };
+
   return (
-    <div className="flex justify-center items-center h-screen">
-      <form
-        className="flex flex-col border  rounded-lg p-10 bg-blue-200 shadow-xl w-1/4"
-        onSubmit={handleSubmit}
-      >
-        <h1 className="text-2xl">Login</h1>
-        <div className="flex flex-col p-2 m-2">
-          <span>Email:</span>
-          <input
-            type="text"
-            placeholder="Email"
-            className="p-2 outline-none rounded-md my-1"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <div>
+      {isRegistered ? (
+        // Show Login form
+        <div className="flex flex-col justify-center items-center h-screen">
+          <div className="bg-blue-100 p-4 w-1/3">
+            <h2 className="text-center font-bold">Login</h2>
+            <form className="flex flex-col m-2">
+              <label>Email:</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="p-2 rounded-lg my-2"
+              />
+
+              <label>Password:</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="p-2 rounded-lg my-2 "
+              />
+
+              <button
+                type="button"
+                onClick={handleLogin}
+                className="bg-blue-400 my-2 rounded-lg p-2"
+              >
+                Login
+              </button>
+              <button
+                className="bg-blue-400 p-2 my-2 w-1/4 rounded-lg"
+                onClick={() => setIsRegistered(false)}
+              >
+                New User
+              </button>
+            </form>
+          </div>
         </div>
-        <div className="flex flex-col p-2 m-2">
-          <span>Password:</span>
-          <input
-            type="text"
-            placeholder="password"
-            className="p-2 outline-none rounded-md my-1"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+      ) : (
+        // Show Registration form
+        <div className="flex flex-col justify-center items-center h-screen">
+          <div className="bg-blue-200 p-4 w-1/3 rounded-lg">
+            <h2 className="text-center">Registration</h2>
+            <form className="flex flex-col">
+              <label>Email:</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="p-2 rounded-lg my-2"
+              />
+
+              <label>Password:</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="p-2 rounded-lg my-2"
+              />
+
+              <label>Name:</label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="p-2 rounded-lg my-2"
+              />
+
+              <label>Role:</label>
+              <input
+                type="text"
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                className="p-2 rounded-lg my-2"
+              />
+
+              <label>Phone:</label>
+              <input
+                type="text"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="p-2 rounded-lg my-2"
+              />
+
+              <button
+                type="button"
+                onClick={handleRegister}
+                className="bg-blue-400 p-2 my-2 w-1/4 rounded-lg"
+              >
+                Register
+              </button>
+              <button
+                type="button"
+                onClick={() => setIsRegistered(true)}
+                className="bg-blue-400 p-2 my-2 w-1/4 rounded-lg"
+              >
+                Log In
+              </button>
+            </form>
+          </div>
         </div>
-        <button type="submit" className="bg-blue-400 m-2 p-2 rounded-lg">
-          Log In
-        </button>
-      </form>
+      )}
     </div>
   );
 };

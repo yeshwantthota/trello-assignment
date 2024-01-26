@@ -117,14 +117,18 @@ const CreateTodo = ({ onClose }) => {
             onChange={handleChange}
             className="p-2 border border-gray-400 rounded-md"
           />
-
-          <label>Attachment:</label>
+          <label
+            htmlFor="attachments"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Attachments
+          </label>
           <input
-            type="text"
-            name="attachment"
-            value={todoData.attachment}
-            onChange={handleChange}
-            className="p-2 border border-gray-400 rounded-md"
+            id="attachments"
+            type="file"
+            multiple
+            onChange={(e) => setAttachments(e.target.files)}
+            className="mt-1 p-2 block w-full border rounded-md shadow-sm focus:outline-none focus:ring focus:border-blue-300"
           />
 
           <button
