@@ -67,7 +67,7 @@ app.post("/api/login", async (req, res) => {
         name: user.details.name,
         phone: user.details.phone,
       },
-      "your-secret-key"
+      "yeshwant"
     );
 
     res.json({ token });
